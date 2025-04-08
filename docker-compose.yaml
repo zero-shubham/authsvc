@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  authsvc-db:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=datab
+    ports:
+      - '5432:5432'
+
+  authsvc:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - '50050:50050'
+    restart: always
+    volumes:
+      - app-vol:/root
+      - type: bind
+        source: './'
+        target: '/authsvc'
+    depends_on:
+      - authsvc-db
+volumes:
+  postgres_data:
+  app-vol:

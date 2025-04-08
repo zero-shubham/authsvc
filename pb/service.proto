@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package grpc;
+
+option go_package = "github.com/zero-shubham/authsvc/transport/grpc";
+
+service AuthService {
+  rpc UserToken (UserTokenRequest) returns (TokenResponse);
+  rpc ServiceToken (ServiceTokenRequest) returns(TokenResponse);
+  rpc ExchangeToken(ExchangeTokenRequest ) returns(TokenResponse);
+  rpc CreateUser(UserRequest) returns(UserResponse);
+  rpc UpdateUser(UserRequest) returns(UserResponse);
+  rpc CreateAppGroup(AppGroupRequest) returns(AppGroupResponse);
+  rpc UpdateAppGroup(AppGroupRequest) returns(AppGroupResponse);
+  rpc CreateApp(AppRequest) returns(AppResponse);
+  rpc UpdateApp(AppRequest) returns(AppResponse);
+}
+
+message AppRequest{
+ string org_id = 1;
+ string app_group_id =2;
+}
+
+message AppResponse{
+  string id = 1;
+  string org_id = 2;
+  string app_group_id = 3;
+ }
+
+message AppGroupRequest{
+  string org_id = 1;
+  string name = 2;
+  repeated string scopes = 3;
+}
+
+message AppGroupResponse{
+  string id = 1;
+  string org_id = 2;
+  string name = 3;
+  repeated string scopes = 4;
+}
+
+message UserRequest{
+  string email = 1;
+  string password = 2;
+  string org_id = 3;
+  string app_group_id = 4;
+}
+
+message UserResponse{
+  string id = 1;
+  string email = 2;
+  string org_id = 4;
+  string app_group_id = 5;
+}
+
+message UserTokenRequest {
+  string email = 1;
+  string password = 2;
+}
+  
+message TokenResponse {
+  string access_token = 1;
+  string refresh_token =2;
+}
+
+message ServiceTokenRequest{
+  string app_id = 1;
+}
+
+message ExchangeTokenRequest{
+  string access_token = 1;
+  string refresh_token =2;
+  string app_id = 3;
+}
