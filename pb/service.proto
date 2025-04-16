@@ -70,6 +70,6 @@ message ServiceTokenRequest{
 
 message ExchangeTokenRequest{
   string access_token = 1;
-  string refresh_token =2;
+  string refresh_token = 2;
   string app_id = 3;
 }

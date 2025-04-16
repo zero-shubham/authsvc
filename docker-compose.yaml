@@ -19,6 +19,8 @@ services:
     ports:
       - '50050:50050'
     restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@authsvc-db:5432/datab
     volumes:
       - app-vol:/root
       - type: bind

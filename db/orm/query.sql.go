@@ -8,7 +8,7 @@ package db
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
 const createApp = `-- name: CreateApp :one
@@ -18,8 +18,8 @@ RETURNING id, org_id, app_grp_id, created_at, updated_at
 `
 
 type CreateAppParams struct {
-	OrgID    pgtype.UUID
-	AppGrpID pgtype.UUID
+	OrgID    uuid.NullUUID
+	AppGrpID uuid.UUID
 }
 
 func (q *Queries) CreateApp(ctx context.Context, arg CreateAppParams) (App, error) {
@@ -42,7 +42,7 @@ RETURNING id, org_id, name, scopes, created_at, updated_at
 `
 
 type CreateAppGroupParams struct {
-	OrgID  pgtype.UUID
+	OrgID  uuid.UUID
 	Name   string
 	Scopes []string
 }
@@ -70,8 +70,8 @@ RETURNING id, email, password, app_group_id, org_id, created_at, updated_at
 type CreateUserParams struct {
 	Email      string
 	Password   string
-	AppGroupID pgtype.UUID
-	OrgID      pgtype.UUID
+	AppGroupID uuid.UUID
+	OrgID      uuid.NullUUID
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {

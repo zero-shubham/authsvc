@@ -5,20 +5,21 @@
 package db
 
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type App struct {
-	ID        pgtype.UUID
-	OrgID     pgtype.UUID
-	AppGrpID  pgtype.UUID
+	ID        uuid.UUID
+	OrgID     uuid.NullUUID
+	AppGrpID  uuid.UUID
 	CreatedAt pgtype.Timestamptz
 	UpdatedAt pgtype.Timestamptz
 }
 
 type AppGroup struct {
-	ID        pgtype.UUID
-	OrgID     pgtype.UUID
+	ID        uuid.UUID
+	OrgID     uuid.UUID
 	Name      string
 	Scopes    []string
 	CreatedAt pgtype.Timestamptz
@@ -26,11 +27,11 @@ type AppGroup struct {
 }
 
 type User struct {
-	ID         pgtype.UUID
+	ID         uuid.UUID
 	Email      string
 	Password   string
-	AppGroupID pgtype.UUID
-	OrgID      pgtype.UUID
+	AppGroupID uuid.UUID
+	OrgID      uuid.NullUUID
 	CreatedAt  pgtype.Timestamptz
 	UpdatedAt  pgtype.Timestamptz
 }

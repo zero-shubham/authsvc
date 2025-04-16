@@ -12,8 +12,8 @@ CREATE TABLE app_groups (
 -- Migration for creating apps table
 CREATE TABLE apps (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    org_id UUID NOT NULL,
-    app_grp_id UUID,
+    org_id UUID,
+    app_grp_id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     CONSTRAINT fk_apps_app_groups FOREIGN KEY (app_grp_id) REFERENCES app_groups(id) ON DELETE SET NULL
