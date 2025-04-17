@@ -21,6 +21,7 @@ services:
     restart: always
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@authsvc-db:5432/datab
+      - JWT_SIGN_KEY=asdfwefasvdfg123sdfg34asg
     volumes:
       - app-vol:/root
       - type: bind

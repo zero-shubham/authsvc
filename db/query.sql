@@ -14,5 +14,7 @@ VALUES ($1, $2, $3, $4)
 RETURNING *;
 
 
--- name: GetUserByEmail :one
-SELECT * FROM users WHERE email = $1;
+-- name: GetUserAndAppGrpByEmail :one
+SELECT users.*, app_groups.scopes
+FROM users
+JOIN app_groups ON users.app_group_id = app_groups.id WHERE email = $1;

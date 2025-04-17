@@ -20,12 +20,6 @@ func NewServer(conn db.DBTX) *Server {
 	}
 }
 
-func (s *Server) UserToken(ctx context.Context, in *authrpc.UserTokenRequest) (*authrpc.TokenResponse, error) {
-	return &authrpc.TokenResponse{
-		AccessToken: "test-token",
-	}, nil
-}
-
 func (s *Server) CreateUser(ctx context.Context, in *authrpc.UserRequest) (*authrpc.UserResponse, error) {
 	orm := db.New(s.conn)
 
@@ -144,4 +138,32 @@ func (s *Server) CreateAppGroup(ctx context.Context, in *authrpc.AppGroupRequest
 		Name:   appGroup.Name,
 		Scopes: appGroup.Scopes,
 	}, nil
+}
+
+func (s *Server) UserToken(ctx context.Context, in *authrpc.UserTokenRequest) (*authrpc.TokenResponse, error) {
+
+	orm := db.New(s.conn)
+
+	user, err := orm.GetUserAndAppGrpByEmail(ctx, in.Email)
+	if err != nil {
+		log.Err(err).Msg("failed to retrieve user record by email")
+		return &authrpc.TokenResponse{}, err
+	}
+
+	if !CheckPasswordHash(in.Password, user.Password) {
+		log.Err(err).Msg("failed to retrieve user record by email")
+		return &authrpc.TokenResponse{}, err
+	}
+
+	token, err := CreateToken(user.ID.String(), user.Scopes)
+	if err != nil {
+		log.Err(err).Msg("internal server error")
+		return &authrpc.TokenResponse{}, err
+	}
+
+	resp := authrpc.TokenResponse{
+		AccessToken: token,
+	}
+
+	return &resp, err
 }

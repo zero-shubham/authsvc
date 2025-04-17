@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createApp = `-- name: CreateApp :one
@@ -94,13 +95,26 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
-const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, email, password, app_group_id, org_id, created_at, updated_at FROM users WHERE email = $1
+const getUserAndAppGrpByEmail = `-- name: GetUserAndAppGrpByEmail :one
+SELECT users.id, users.email, users.password, users.app_group_id, users.org_id, users.created_at, users.updated_at, app_groups.scopes
+FROM users
+JOIN app_groups ON users.app_group_id = app_groups.id WHERE email = $1
 `
 
-func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
-	row := q.db.QueryRow(ctx, getUserByEmail, email)
-	var i User
+type GetUserAndAppGrpByEmailRow struct {
+	ID         uuid.UUID
+	Email      string
+	Password   string
+	AppGroupID uuid.UUID
+	OrgID      uuid.NullUUID
+	CreatedAt  pgtype.Timestamptz
+	UpdatedAt  pgtype.Timestamptz
+	Scopes     []string
+}
+
+func (q *Queries) GetUserAndAppGrpByEmail(ctx context.Context, email string) (GetUserAndAppGrpByEmailRow, error) {
+	row := q.db.QueryRow(ctx, getUserAndAppGrpByEmail, email)
+	var i GetUserAndAppGrpByEmailRow
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
@@ -109,6 +123,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.OrgID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Scopes,
 	)
 	return i, err
 }
