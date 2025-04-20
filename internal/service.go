@@ -246,6 +246,7 @@ func (s *Server) ExchangeToken(ctx context.Context, in *authrpc.ExchangeTokenReq
 
 	claims, err := ParseToken(in.AccessToken)
 	if err != nil {
+		log.Err(err).Msg("error while parsing token")
 		return nil, errors.New("error while parsing token")
 	}
 

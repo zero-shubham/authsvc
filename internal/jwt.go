@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -20,16 +21,17 @@ func CreateToken(subId string, scopes []string, obo string) (string, error) {
 	now := time.Now()
 	// Create a new token object, specifying signing method and the claims
 	// you would like it to contain.
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"aud":    "surveyx_api_gateway",
-		"iss":    "authsvc",
-		"sub":    subId,
-		"foo":    "bar",
-		"iat":    now.Unix(),
-		"exp":    now.Add(JwtExp * time.Second).Unix(),
-		"scopes": scopes,
-		"jti":    uuid.New().String(),
-		"obo":    obo,
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, TokenClaims{
+		Scopes:   scopes,
+		OnBehalf: obo,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    "authsvc",
+			Subject:   subId,
+			Audience:  jwt.ClaimStrings{"surveyx_api_gateway"},
+			ExpiresAt: jwt.NewNumericDate(now.Add(JwtExp * time.Second)),
+			IssuedAt:  jwt.NewNumericDate(now),
+			ID:        uuid.New().String(),
+		},
 	})
 
 	// Sign and get the complete encoded token as a string using the secret
@@ -42,22 +44,16 @@ func CreateToken(subId string, scopes []string, obo string) (string, error) {
 }
 
 type TokenClaims struct {
-	Audience string   `json:"aud"`
-	Issuer   string   `json:"iss"`
-	Subject  string   `json:"sub"`
-	Foo      string   `json:"foo"`
-	IssuedAt int64    `json:"iat"`
-	Expires  int64    `json:"exp"`
 	Scopes   []string `json:"scopes"`
-	JwtID    string   `json:"jti"`
-	OBO      string   `json:"obo"`
+	OnBehalf string   `json:"obo"`
+	jwt.RegisteredClaims
 }
 
 func ParseToken(tokenString string) (TokenClaims, error) {
-	claims := jwt.MapClaims{}
+	var claims TokenClaims
 	// Parse the token
 	token, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
-		return jwtSignKey, nil
+		return []byte(jwtSignKey), nil
 	})
 	if err != nil {
 		return TokenClaims{}, err
@@ -67,15 +63,6 @@ func ParseToken(tokenString string) (TokenClaims, error) {
 		return TokenClaims{}, errors.New("error while parsing token")
 	}
 
-	return TokenClaims{
-		Audience: claims["aud"].(string),
-		Issuer:   claims["iss"].(string),
-		Subject:  claims["sub"].(string),
-		Foo:      claims["foo"].(string),
-		IssuedAt: int64(claims["iat"].(float64)),
-		Expires:  int64(claims["exp"].(float64)),
-		Scopes:   claims["scopes"].([]string),
-		JwtID:    claims["jti"].(string),
-		OBO:      claims["obo"].(string),
-	}, nil
+	log.Info().Interface("claims", claims).Msg("valid token")
+	return claims, nil
 }
