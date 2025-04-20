@@ -95,6 +95,63 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const getAppGroupByID = `-- name: GetAppGroupByID :one
+SELECT id, org_id, name, scopes, created_at, updated_at
+FROM app_groups
+WHERE id = $1
+`
+
+func (q *Queries) GetAppGroupByID(ctx context.Context, id uuid.UUID) (AppGroup, error) {
+	row := q.db.QueryRow(ctx, getAppGroupByID, id)
+	var i AppGroup
+	err := row.Scan(
+		&i.ID,
+		&i.OrgID,
+		&i.Name,
+		&i.Scopes,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getAppGrpByAppID = `-- name: GetAppGrpByAppID :one
+SELECT app_groups.id, app_groups.org_id, name, scopes, app_groups.created_at, app_groups.updated_at, apps.id, apps.org_id, app_grp_id, apps.created_at, apps.updated_at from app_groups JOIN apps on app_groups.id = apps.app_grp_id WHERE apps.id = $1
+`
+
+type GetAppGrpByAppIDRow struct {
+	ID          uuid.UUID
+	OrgID       uuid.UUID
+	Name        string
+	Scopes      []string
+	CreatedAt   pgtype.Timestamptz
+	UpdatedAt   pgtype.Timestamptz
+	ID_2        uuid.UUID
+	OrgID_2     uuid.NullUUID
+	AppGrpID    uuid.UUID
+	CreatedAt_2 pgtype.Timestamptz
+	UpdatedAt_2 pgtype.Timestamptz
+}
+
+func (q *Queries) GetAppGrpByAppID(ctx context.Context, id uuid.UUID) (GetAppGrpByAppIDRow, error) {
+	row := q.db.QueryRow(ctx, getAppGrpByAppID, id)
+	var i GetAppGrpByAppIDRow
+	err := row.Scan(
+		&i.ID,
+		&i.OrgID,
+		&i.Name,
+		&i.Scopes,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ID_2,
+		&i.OrgID_2,
+		&i.AppGrpID,
+		&i.CreatedAt_2,
+		&i.UpdatedAt_2,
+	)
+	return i, err
+}
+
 const getUserAndAppGrpByEmail = `-- name: GetUserAndAppGrpByEmail :one
 SELECT users.id, users.email, users.password, users.app_group_id, users.org_id, users.created_at, users.updated_at, app_groups.scopes
 FROM users
@@ -124,6 +181,42 @@ func (q *Queries) GetUserAndAppGrpByEmail(ctx context.Context, email string) (Ge
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Scopes,
+	)
+	return i, err
+}
+
+const updateAppGroup = `-- name: UpdateAppGroup :one
+UPDATE app_groups
+SET name = $2,
+    scopes = $3,
+    org_id = $4,
+    updated_at = NOW()
+WHERE id = $1
+RETURNING id, org_id, name, scopes, created_at, updated_at
+`
+
+type UpdateAppGroupParams struct {
+	ID     uuid.UUID
+	Name   string
+	Scopes []string
+	OrgID  uuid.UUID
+}
+
+func (q *Queries) UpdateAppGroup(ctx context.Context, arg UpdateAppGroupParams) (AppGroup, error) {
+	row := q.db.QueryRow(ctx, updateAppGroup,
+		arg.ID,
+		arg.Name,
+		arg.Scopes,
+		arg.OrgID,
+	)
+	var i AppGroup
+	err := row.Scan(
+		&i.ID,
+		&i.OrgID,
+		&i.Name,
+		&i.Scopes,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }

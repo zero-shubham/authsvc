@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
@@ -155,7 +156,7 @@ func (s *Server) UserToken(ctx context.Context, in *authrpc.UserTokenRequest) (*
 		return &authrpc.TokenResponse{}, err
 	}
 
-	token, err := CreateToken(user.ID.String(), user.Scopes)
+	token, err := CreateToken(user.ID.String(), user.Scopes, user.ID.String())
 	if err != nil {
 		log.Err(err).Msg("internal server error")
 		return &authrpc.TokenResponse{}, err
@@ -166,4 +167,94 @@ func (s *Server) UserToken(ctx context.Context, in *authrpc.UserTokenRequest) (*
 	}
 
 	return &resp, err
+}
+
+func (s *Server) UpdateAppGroup(ctx context.Context, in *authrpc.AppGroupRequest) (*authrpc.AppGroupResponse, error) {
+	orm := db.New(s.conn)
+
+	if in.Id == "" {
+		log.Info().Msg("Id not passed for UpdateAppGroup")
+		return &authrpc.AppGroupResponse{}, errors.New("required Id missing")
+	}
+
+	id, err := uuid.Parse(in.Id)
+	if err != nil {
+		log.Err(err).Msg("failed to parse Id")
+		return &authrpc.AppGroupResponse{}, err
+	}
+
+	// First get the existing app group to ensure it exists
+	appGroup, err := orm.GetAppGroupByID(ctx, id)
+	if err != nil {
+		log.Err(err).Msg("failed to retrieve app group")
+		return &authrpc.AppGroupResponse{}, err
+	}
+
+	params := db.UpdateAppGroupParams{
+		ID:     appGroup.ID,
+		Name:   in.Name,
+		Scopes: in.Scopes,
+	}
+
+	if in.OrgId != "" {
+		oid, err := uuid.Parse(in.OrgId)
+		if err != nil {
+			log.Err(err).Msg("failed to parse OrgIdId")
+			return &authrpc.AppGroupResponse{}, err
+		}
+		params.OrgID = oid
+	}
+
+	// Update the app group with new values
+	updatedAppGroup, err := orm.UpdateAppGroup(ctx, params)
+	if err != nil {
+		log.Err(err).Msg("failed to update app group")
+		return &authrpc.AppGroupResponse{}, err
+	}
+
+	return &authrpc.AppGroupResponse{
+		Id:     updatedAppGroup.ID.String(),
+		OrgId:  updatedAppGroup.OrgID.String(),
+		Name:   updatedAppGroup.Name,
+		Scopes: updatedAppGroup.Scopes,
+	}, nil
+}
+
+func (s *Server) ExchangeToken(ctx context.Context, in *authrpc.ExchangeTokenRequest) (*authrpc.TokenResponse, error) {
+	if in.AppId == "" {
+		return nil, errors.New("missing required AppId")
+	}
+
+	if in.AccessToken == "" {
+		return nil, errors.New("missing required AccessToken")
+	}
+
+	if in.AppId == "" {
+		return nil, errors.New("missing required AppId")
+	}
+
+	appID, err := uuid.Parse(in.AppId)
+	if err != nil {
+		return nil, errors.New("error parsing AppId")
+	}
+
+	orm := db.New(s.conn)
+	appGrp, err := orm.GetAppGrpByAppID(ctx, appID)
+	if err != nil {
+		return nil, errors.New("error while retrieving app")
+	}
+
+	claims, err := ParseToken(in.AccessToken)
+	if err != nil {
+		return nil, errors.New("error while parsing token")
+	}
+
+	token, err := CreateToken(in.AppId, appGrp.Scopes, claims.Subject)
+	if err != nil {
+		return nil, errors.New("error while creating token")
+	}
+
+	return &authrpc.TokenResponse{
+		AccessToken: token,
+	}, nil
 }

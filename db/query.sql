@@ -18,3 +18,20 @@ RETURNING *;
 SELECT users.*, app_groups.scopes
 FROM users
 JOIN app_groups ON users.app_group_id = app_groups.id WHERE email = $1;
+
+-- name: UpdateAppGroup :one
+UPDATE app_groups
+SET name = $2,
+    scopes = $3,
+    org_id = $4,
+    updated_at = NOW()
+WHERE id = $1
+RETURNING id, org_id, name, scopes, created_at, updated_at;
+
+-- name: GetAppGroupByID :one
+SELECT id, org_id, name, scopes, created_at, updated_at
+FROM app_groups
+WHERE id = $1; 
+
+-- name: GetAppGrpByAppID :one
+SELECT * from app_groups JOIN apps on app_groups.id = apps.app_grp_id WHERE apps.id = $1;
