@@ -1,0 +1,7 @@
+FROM migrate/migrate
+
+
+COPY ./db/migrations /tmp
+
+ENTRYPOINT [ "migrate" ]
+

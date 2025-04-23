@@ -26,7 +26,7 @@ func (s *Server) CreateUser(ctx context.Context, in *authrpc.UserRequest) (*auth
 
 	agId, err := uuid.Parse(in.AppGroupId)
 	if err != nil {
-		log.Err(err).Msg("failed to parse AppGroupId")
+		log.Ctx(ctx).Err(err).Msg("failed to parse AppGroupId")
 		return &authrpc.UserResponse{}, err
 	}
 

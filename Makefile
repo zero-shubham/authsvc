@@ -14,3 +14,6 @@ migrate_up:
 
 migrate_down:
 	migrate -path db/migrations/ -database "postgresql://postgres:postgres@localhost:5432/datab?sslmode=disable" -verbose down
+
+protobin:
+	protoc --descriptor_set_out=pb/service.pb pb/service.proto
