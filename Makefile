@@ -17,3 +17,6 @@ migrate_down:
 
 protobin:
 	protoc --descriptor_set_out=pb/service.pb pb/service.proto
+
+seed:
+	go run ./cmd/seed/main.go
