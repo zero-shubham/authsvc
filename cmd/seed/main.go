@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	db "github.com/zero-shubham/authsvc/db/orm"
+	password "github.com/zero-shubham/authsvc/internal"
 )
 
 const (
@@ -32,6 +33,7 @@ func main() {
 	if superAdminEmail == "" || superAdminPass == "" {
 		log.Fatal().Msgf("missing %s or %s env", SuperAdminEmailEnv, SuperAdminPassEnv)
 	}
+	log.Info().Str("superadmin_pass", superAdminPass).Str("superadmin_email", superAdminEmail).Msg("ready to seed")
 
 	dbConn, err := pgx.Connect(ctx, DB_URL)
 	if err != nil {
@@ -64,9 +66,14 @@ func main() {
 		log.Fatal().Err(err).Msg("failed to seed app group")
 	}
 
+	hashedPass, err := password.HashPassword(superAdminPass)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to hash password")
+	}
+
 	user, err := orm.CreateUser(ctx, db.CreateUserParams{
 		Email:      superAdminEmail,
-		Password:   superAdminPass,
+		Password:   hashedPass,
 		AppGroupID: appGrp.ID,
 	})
 	if err != nil {

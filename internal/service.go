@@ -152,8 +152,8 @@ func (s *Server) UserToken(ctx context.Context, in *authrpc.UserTokenRequest) (*
 	}
 
 	if !CheckPasswordHash(in.Password, user.Password) {
-		log.Err(err).Msg("failed to retrieve user record by email")
-		return &authrpc.TokenResponse{}, err
+		log.Warn().Str("in_password", in.Password).Msg("password hash mismatch")
+		return &authrpc.TokenResponse{}, errors.New("failed to retrieve user")
 	}
 
 	token, err := CreateToken(user.ID.String(), user.Scopes, user.ID.String())
