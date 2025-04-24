@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net"
+	"net/http"
 	"os"
 	"os/signal"
 
@@ -71,6 +72,15 @@ func main() {
 
 	authsvc := internal.NewServer(dbConn)
 	authrpc.RegisterAuthServiceServer(s, authsvc)
+
+	http.HandleFunc("/jwk", config.JwkHandler)
+	go func() {
+		err = http.ListenAndServe(":50051", nil)
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to start http jwk server")
+		}
+	}()
+	log.Info().Msg("serving jwk")
 
 	if err := s.Serve(listener); err != nil {
 		log.Fatal().Err(err).Msg("failed to serve")

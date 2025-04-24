@@ -8,6 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
+	"github.com/zero-shubham/authsvc/config"
 )
 
 const (
@@ -33,6 +34,8 @@ func CreateToken(subId string, scopes []string, obo string) (string, error) {
 			ID:        uuid.New().String(),
 		},
 	})
+	token.Header["alg"] = "HS256"
+	token.Header["kid"] = config.JWK_VALUE
 
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte(jwtSignKey))

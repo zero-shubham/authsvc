@@ -18,6 +18,7 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - '50050:50050'
+      - '50051:50051'
     restart: always
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@authsvc-db:5432/datab
