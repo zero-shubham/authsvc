@@ -12,6 +12,7 @@ service AuthService {
   rpc UpdateUser(UserRequest) returns(UserResponse);
   rpc CreateAppGroup(AppGroupRequest) returns(AppGroupResponse);
   rpc UpdateAppGroup(AppGroupRequest) returns(AppGroupResponse);
+  rpc GetAppGroup(GetAppGroupRequest) returns(AppGroupResponse);
   rpc CreateApp(AppRequest) returns(AppResponse);
   rpc UpdateApp(AppRequest) returns(AppResponse);
 }
@@ -25,6 +26,11 @@ message AppResponse{
   string id = 1;
   string org_id = 2;
   string app_group_id = 3;
+}
+
+message GetAppGroupRequest{
+  string id = 1;
+  string name = 2;
 }
 
 message AppGroupRequest{

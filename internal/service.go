@@ -259,3 +259,41 @@ func (s *Server) ExchangeToken(ctx context.Context, in *authrpc.ExchangeTokenReq
 		AccessToken: token,
 	}, nil
 }
+
+func (s *Server) GetAppGroup(ctx context.Context, in *authrpc.GetAppGroupRequest) (*authrpc.AppGroupResponse, error) {
+	orm := db.New(s.conn)
+
+	// Check if we have either ID or name to search by
+	if in.Id == "" && in.Name == "" {
+		log.Info().Msg("neither Id nor Name provided for GetAppGroup")
+		return &authrpc.AppGroupResponse{}, errors.New("either Id or Name must be provided")
+	}
+
+	var appGroup db.AppGroup
+	var err error
+
+	// Try to get by ID first if provided
+	if in.Id != "" {
+		id, err := uuid.Parse(in.Id)
+		if err != nil {
+			log.Err(err).Msg("failed to parse Id")
+			return &authrpc.AppGroupResponse{}, err
+		}
+		appGroup, err = orm.GetAppGroupByID(ctx, id)
+	} else {
+		// Get by name if ID not provided
+		appGroup, err = orm.GetAppGroupByName(ctx, in.Name)
+	}
+
+	if err != nil {
+		log.Err(err).Msg("failed to retrieve app group")
+		return &authrpc.AppGroupResponse{}, err
+	}
+
+	return &authrpc.AppGroupResponse{
+		Id:     appGroup.ID.String(),
+		OrgId:  appGroup.OrgID.String(),
+		Name:   appGroup.Name,
+		Scopes: appGroup.Scopes,
+	}, nil
+}

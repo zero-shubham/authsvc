@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  authsvc-test-db:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=datab
+    ports:
+      - '5432:5432'
+
+  authsvc-test:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - '50050:50050'
+      - '50051:50051'
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@authsvc-test-db:5432/datab
+      - JWT_SIGN_KEY=asdfwefasvdfg123sdfg34asg
+      - SUPERADMIN_EMAIL=superadmin@surveyx.com
+      - SUPERADMIN_PASS=123456
+    volumes:
+      - app-vol:/root
+      - type: bind
+        source: './'
+        target: '/authsvc'
+    depends_on:
+      - authsvc-test-db
+    command:
+      [
+        '/bin/sh',
+        '-c',
+        'go run ./cmd/seed/main.go; sleep 10',
+      ]
+volumes:
+  postgres_data:
+  app-vol:

@@ -95,6 +95,15 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const dbCleanUp = `-- name: DbCleanUp :exec
+DROP TABLE IF EXISTS apps, app_groups, users CASCADE
+`
+
+func (q *Queries) DbCleanUp(ctx context.Context) error {
+	_, err := q.db.Exec(ctx, dbCleanUp)
+	return err
+}
+
 const getAppGroupByID = `-- name: GetAppGroupByID :one
 SELECT id, org_id, name, scopes, created_at, updated_at
 FROM app_groups
@@ -103,6 +112,26 @@ WHERE id = $1
 
 func (q *Queries) GetAppGroupByID(ctx context.Context, id uuid.UUID) (AppGroup, error) {
 	row := q.db.QueryRow(ctx, getAppGroupByID, id)
+	var i AppGroup
+	err := row.Scan(
+		&i.ID,
+		&i.OrgID,
+		&i.Name,
+		&i.Scopes,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getAppGroupByName = `-- name: GetAppGroupByName :one
+SELECT id, org_id, name, scopes, created_at, updated_at
+FROM app_groups
+WHERE name = $1
+`
+
+func (q *Queries) GetAppGroupByName(ctx context.Context, name string) (AppGroup, error) {
+	row := q.db.QueryRow(ctx, getAppGroupByName, name)
 	var i AppGroup
 	err := row.Scan(
 		&i.ID,

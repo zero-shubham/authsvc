@@ -35,3 +35,11 @@ WHERE id = $1;
 
 -- name: GetAppGrpByAppID :one
 SELECT * from app_groups JOIN apps on app_groups.id = apps.app_grp_id WHERE apps.id = $1;
+
+-- name: GetAppGroupByName :one
+SELECT id, org_id, name, scopes, created_at, updated_at
+FROM app_groups
+WHERE name = $1; 
+
+-- name: DbCleanUp :exec
+DROP TABLE IF EXISTS apps, app_groups, users CASCADE;

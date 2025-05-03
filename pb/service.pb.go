@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v3.12.4
-// source: service.proto
+// source: pb/service.proto
 
 package grpc
 
@@ -31,7 +31,7 @@ type AppRequest struct {
 
 func (x *AppRequest) Reset() {
 	*x = AppRequest{}
-	mi := &file_service_proto_msgTypes[0]
+	mi := &file_pb_service_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +43,7 @@ func (x *AppRequest) String() string {
 func (*AppRequest) ProtoMessage() {}
 
 func (x *AppRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[0]
+	mi := &file_pb_service_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +56,7 @@ func (x *AppRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppRequest.ProtoReflect.Descriptor instead.
 func (*AppRequest) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{0}
+	return file_pb_service_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *AppRequest) GetOrgId() string {
@@ -84,7 +84,7 @@ type AppResponse struct {
 
 func (x *AppResponse) Reset() {
 	*x = AppResponse{}
-	mi := &file_service_proto_msgTypes[1]
+	mi := &file_pb_service_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -96,7 +96,7 @@ func (x *AppResponse) String() string {
 func (*AppResponse) ProtoMessage() {}
 
 func (x *AppResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[1]
+	mi := &file_pb_service_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -109,7 +109,7 @@ func (x *AppResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppResponse.ProtoReflect.Descriptor instead.
 func (*AppResponse) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{1}
+	return file_pb_service_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AppResponse) GetId() string {
@@ -143,7 +143,7 @@ type GetAppGroupRequest struct {
 
 func (x *GetAppGroupRequest) Reset() {
 	*x = GetAppGroupRequest{}
-	mi := &file_service_proto_msgTypes[2]
+	mi := &file_pb_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -155,7 +155,7 @@ func (x *GetAppGroupRequest) String() string {
 func (*GetAppGroupRequest) ProtoMessage() {}
 
 func (x *GetAppGroupRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[2]
+	mi := &file_pb_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -168,7 +168,7 @@ func (x *GetAppGroupRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAppGroupRequest.ProtoReflect.Descriptor instead.
 func (*GetAppGroupRequest) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{2}
+	return file_pb_service_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetAppGroupRequest) GetId() string {
@@ -197,7 +197,7 @@ type AppGroupRequest struct {
 
 func (x *AppGroupRequest) Reset() {
 	*x = AppGroupRequest{}
-	mi := &file_service_proto_msgTypes[3]
+	mi := &file_pb_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -209,7 +209,7 @@ func (x *AppGroupRequest) String() string {
 func (*AppGroupRequest) ProtoMessage() {}
 
 func (x *AppGroupRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[3]
+	mi := &file_pb_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -222,7 +222,7 @@ func (x *AppGroupRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppGroupRequest.ProtoReflect.Descriptor instead.
 func (*AppGroupRequest) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{3}
+	return file_pb_service_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *AppGroupRequest) GetId() string {
@@ -265,7 +265,7 @@ type AppGroupResponse struct {
 
 func (x *AppGroupResponse) Reset() {
 	*x = AppGroupResponse{}
-	mi := &file_service_proto_msgTypes[4]
+	mi := &file_pb_service_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -277,7 +277,7 @@ func (x *AppGroupResponse) String() string {
 func (*AppGroupResponse) ProtoMessage() {}
 
 func (x *AppGroupResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[4]
+	mi := &file_pb_service_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -290,7 +290,7 @@ func (x *AppGroupResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppGroupResponse.ProtoReflect.Descriptor instead.
 func (*AppGroupResponse) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{4}
+	return file_pb_service_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *AppGroupResponse) GetId() string {
@@ -333,7 +333,7 @@ type UserRequest struct {
 
 func (x *UserRequest) Reset() {
 	*x = UserRequest{}
-	mi := &file_service_proto_msgTypes[5]
+	mi := &file_pb_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -345,7 +345,7 @@ func (x *UserRequest) String() string {
 func (*UserRequest) ProtoMessage() {}
 
 func (x *UserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[5]
+	mi := &file_pb_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -358,7 +358,7 @@ func (x *UserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserRequest.ProtoReflect.Descriptor instead.
 func (*UserRequest) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{5}
+	return file_pb_service_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UserRequest) GetEmail() string {
@@ -401,7 +401,7 @@ type UserResponse struct {
 
 func (x *UserResponse) Reset() {
 	*x = UserResponse{}
-	mi := &file_service_proto_msgTypes[6]
+	mi := &file_pb_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -413,7 +413,7 @@ func (x *UserResponse) String() string {
 func (*UserResponse) ProtoMessage() {}
 
 func (x *UserResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[6]
+	mi := &file_pb_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -426,7 +426,7 @@ func (x *UserResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserResponse.ProtoReflect.Descriptor instead.
 func (*UserResponse) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{6}
+	return file_pb_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UserResponse) GetId() string {
@@ -467,7 +467,7 @@ type UserTokenRequest struct {
 
 func (x *UserTokenRequest) Reset() {
 	*x = UserTokenRequest{}
-	mi := &file_service_proto_msgTypes[7]
+	mi := &file_pb_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -479,7 +479,7 @@ func (x *UserTokenRequest) String() string {
 func (*UserTokenRequest) ProtoMessage() {}
 
 func (x *UserTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[7]
+	mi := &file_pb_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -492,7 +492,7 @@ func (x *UserTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserTokenRequest.ProtoReflect.Descriptor instead.
 func (*UserTokenRequest) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{7}
+	return file_pb_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UserTokenRequest) GetEmail() string {
@@ -519,7 +519,7 @@ type TokenResponse struct {
 
 func (x *TokenResponse) Reset() {
 	*x = TokenResponse{}
-	mi := &file_service_proto_msgTypes[8]
+	mi := &file_pb_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -531,7 +531,7 @@ func (x *TokenResponse) String() string {
 func (*TokenResponse) ProtoMessage() {}
 
 func (x *TokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[8]
+	mi := &file_pb_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -544,7 +544,7 @@ func (x *TokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TokenResponse.ProtoReflect.Descriptor instead.
 func (*TokenResponse) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{8}
+	return file_pb_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *TokenResponse) GetAccessToken() string {
@@ -570,7 +570,7 @@ type ServiceTokenRequest struct {
 
 func (x *ServiceTokenRequest) Reset() {
 	*x = ServiceTokenRequest{}
-	mi := &file_service_proto_msgTypes[9]
+	mi := &file_pb_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -582,7 +582,7 @@ func (x *ServiceTokenRequest) String() string {
 func (*ServiceTokenRequest) ProtoMessage() {}
 
 func (x *ServiceTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[9]
+	mi := &file_pb_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -595,7 +595,7 @@ func (x *ServiceTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServiceTokenRequest.ProtoReflect.Descriptor instead.
 func (*ServiceTokenRequest) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{9}
+	return file_pb_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ServiceTokenRequest) GetAppId() string {
@@ -616,7 +616,7 @@ type ExchangeTokenRequest struct {
 
 func (x *ExchangeTokenRequest) Reset() {
 	*x = ExchangeTokenRequest{}
-	mi := &file_service_proto_msgTypes[10]
+	mi := &file_pb_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -628,7 +628,7 @@ func (x *ExchangeTokenRequest) String() string {
 func (*ExchangeTokenRequest) ProtoMessage() {}
 
 func (x *ExchangeTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_proto_msgTypes[10]
+	mi := &file_pb_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -641,7 +641,7 @@ func (x *ExchangeTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExchangeTokenRequest.ProtoReflect.Descriptor instead.
 func (*ExchangeTokenRequest) Descriptor() ([]byte, []int) {
-	return file_service_proto_rawDescGZIP(), []int{10}
+	return file_pb_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ExchangeTokenRequest) GetAccessToken() string {
@@ -665,11 +665,11 @@ func (x *ExchangeTokenRequest) GetAppId() string {
 	return ""
 }
 
-var File_service_proto protoreflect.FileDescriptor
+var File_pb_service_proto protoreflect.FileDescriptor
 
-const file_service_proto_rawDesc = "" +
+const file_pb_service_proto_rawDesc = "" +
 	"\n" +
-	"\rservice.proto\x12\x04grpc\"E\n" +
+	"\x10pb/service.proto\x12\x04grpc\"E\n" +
 	"\n" +
 	"AppRequest\x12\x15\n" +
 	"\x06org_id\x18\x01 \x01(\tR\x05orgId\x12 \n" +
@@ -732,19 +732,19 @@ const file_service_proto_rawDesc = "" +
 	"\tUpdateApp\x12\x10.grpc.AppRequest\x1a\x11.grpc.AppResponseB0Z.github.com/zero-shubham/authsvc/transport/grpcb\x06proto3"
 
 var (
-	file_service_proto_rawDescOnce sync.Once
-	file_service_proto_rawDescData []byte
+	file_pb_service_proto_rawDescOnce sync.Once
+	file_pb_service_proto_rawDescData []byte
 )
 
-func file_service_proto_rawDescGZIP() []byte {
-	file_service_proto_rawDescOnce.Do(func() {
-		file_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_service_proto_rawDesc), len(file_service_proto_rawDesc)))
+func file_pb_service_proto_rawDescGZIP() []byte {
+	file_pb_service_proto_rawDescOnce.Do(func() {
+		file_pb_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_pb_service_proto_rawDesc), len(file_pb_service_proto_rawDesc)))
 	})
-	return file_service_proto_rawDescData
+	return file_pb_service_proto_rawDescData
 }
 
-var file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_service_proto_goTypes = []any{
+var file_pb_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_pb_service_proto_goTypes = []any{
 	(*AppRequest)(nil),           // 0: grpc.AppRequest
 	(*AppResponse)(nil),          // 1: grpc.AppResponse
 	(*GetAppGroupRequest)(nil),   // 2: grpc.GetAppGroupRequest
@@ -757,7 +757,7 @@ var file_service_proto_goTypes = []any{
 	(*ServiceTokenRequest)(nil),  // 9: grpc.ServiceTokenRequest
 	(*ExchangeTokenRequest)(nil), // 10: grpc.ExchangeTokenRequest
 }
-var file_service_proto_depIdxs = []int32{
+var file_pb_service_proto_depIdxs = []int32{
 	7,  // 0: grpc.AuthService.UserToken:input_type -> grpc.UserTokenRequest
 	9,  // 1: grpc.AuthService.ServiceToken:input_type -> grpc.ServiceTokenRequest
 	10, // 2: grpc.AuthService.ExchangeToken:input_type -> grpc.ExchangeTokenRequest
@@ -785,26 +785,26 @@ var file_service_proto_depIdxs = []int32{
 	0,  // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_service_proto_init() }
-func file_service_proto_init() {
-	if File_service_proto != nil {
+func init() { file_pb_service_proto_init() }
+func file_pb_service_proto_init() {
+	if File_pb_service_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_service_proto_rawDesc), len(file_service_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pb_service_proto_rawDesc), len(file_pb_service_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_service_proto_goTypes,
-		DependencyIndexes: file_service_proto_depIdxs,
-		MessageInfos:      file_service_proto_msgTypes,
+		GoTypes:           file_pb_service_proto_goTypes,
+		DependencyIndexes: file_pb_service_proto_depIdxs,
+		MessageInfos:      file_pb_service_proto_msgTypes,
 	}.Build()
-	File_service_proto = out.File
-	file_service_proto_goTypes = nil
-	file_service_proto_depIdxs = nil
+	File_pb_service_proto = out.File
+	file_pb_service_proto_goTypes = nil
+	file_pb_service_proto_depIdxs = nil
 }

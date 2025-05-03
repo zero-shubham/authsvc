@@ -20,3 +20,7 @@ protobin:
 
 seed:
 	go run ./cmd/seed/main.go
+
+test:
+	export ENV=test && docker compose -f docker-compose-test.yaml run authsvc-test go test ./... -v
+	docker compose -f docker-compose-test.yaml down --remove-orphans
