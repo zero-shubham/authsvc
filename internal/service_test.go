@@ -40,20 +40,14 @@ func SetupTest(ctx context.Context) {
 	}
 
 	TestDbConn = conn
-
-	go func(ctx context.Context) {
-		<-ctx.Done()
-		if !TestDbConn.IsClosed() {
-			TestDbConn.Close(ctx)
-		}
-	}(ctx)
-
 }
 
 func CleanUp(ctx context.Context) error {
-	err := TestDbConn.Close(ctx)
-	if err != nil {
-		return err
+	if !TestDbConn.IsClosed() {
+		err := TestDbConn.Close(ctx)
+		if err != nil {
+			return err
+		}
 	}
 	return config.MigrateDown()
 }
