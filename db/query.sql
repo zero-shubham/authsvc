@@ -42,4 +42,4 @@ FROM app_groups
 WHERE name = $1; 
 
 -- name: DbCleanUp :exec
-DROP TABLE IF EXISTS apps, app_groups, users CASCADE;
+DROP TABLE IF EXISTS apps, app_groups, users, schema_migrations CASCADE;

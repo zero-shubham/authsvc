@@ -23,4 +23,4 @@ seed:
 
 test:
 	export ENV=test && docker compose -f docker-compose-test.yaml run authsvc-test go test ./... -v
-	docker compose -f docker-compose-test.yaml down --remove-orphans
+	docker compose -f docker-compose-test.yaml down --remove-orphans -v

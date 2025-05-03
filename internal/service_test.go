@@ -2,20 +2,17 @@ package internal_test
 
 import (
 	"context"
-	"database/sql"
-	"errors"
 	"os"
 	"testing"
 
 	"github.com/golang-migrate/migrate/v4"
-	driver "github.com/golang-migrate/migrate/v4/database/pgx/v5"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	db "github.com/zero-shubham/authsvc/db/orm"
+	"github.com/zero-shubham/authsvc/config"
 	"github.com/zero-shubham/authsvc/internal"
 	"github.com/zero-shubham/authsvc/transport/grpc"
 )
@@ -53,39 +50,29 @@ func SetupTest(ctx context.Context) {
 
 }
 
-func RunMigration() error {
-	DB_URL := os.Getenv(DbUrlEnv)
-
-	db, err := sql.Open("pgx/v5", DB_URL)
+func CleanUp(ctx context.Context) error {
+	err := TestDbConn.Close(ctx)
 	if err != nil {
 		return err
 	}
-
-	dr, err := driver.WithInstance(db, &driver.Config{})
-	if err != nil {
-		return err
-	}
-
-	m, err := migrate.NewWithDatabaseInstance(
-		"file:///authsvc/db/migrations",
-		"pgx/v5", dr)
-	if err != nil {
-		return err
-	}
-	return m.Up()
+	return config.MigrateDown()
 }
 
-func CleanUp() error {
-	if TestDbConn.IsClosed() {
-		return errors.New("DB connection closed")
+func dbMigrate() error {
+	err := config.MigrateUp()
+	if err != nil && err != migrate.ErrNoChange {
+		return err
 	}
-	return db.New(TestDbConn).DbCleanUp(context.Background())
+	return nil
 }
 
 func TestService(t *testing.T) {
 	SetupTest(t.Context())
+	require.NoError(t, dbMigrate())
 
-	require.NoError(t, RunMigration())
+	t.Cleanup(func() {
+		require.NoError(t, CleanUp(t.Context()))
+	})
 
 	testSvc := internal.NewServer(TestDbConn)
 	t.Run("create app group and user", func(t *testing.T) {
@@ -107,7 +94,6 @@ func TestService(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, "test@user.com", resp.Email)
 
-		require.NoError(t, CleanUp())
 	})
 
 }

@@ -96,7 +96,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const dbCleanUp = `-- name: DbCleanUp :exec
-DROP TABLE IF EXISTS apps, app_groups, users CASCADE
+DROP TABLE IF EXISTS apps, app_groups, users, schema_migrations CASCADE
 `
 
 func (q *Queries) DbCleanUp(ctx context.Context) error {

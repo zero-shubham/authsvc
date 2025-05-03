@@ -22,7 +22,6 @@ import (
 
 const (
 	MaxIdelConn = 5
-	DbUrlEnv    = "DATABASE_URL"
 )
 
 func main() {
@@ -41,7 +40,7 @@ func main() {
 		}
 	}()
 
-	DB_URL := os.Getenv(DbUrlEnv)
+	DB_URL := os.Getenv(config.DbUrlEnv)
 
 	listener, err := net.Listen("tcp", "0.0.0.0:50050")
 	if err != nil {
