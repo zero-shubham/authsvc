@@ -4,7 +4,7 @@ services:
   authsvc-test-db:
     image: postgres:17
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - test-postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -26,7 +26,7 @@ services:
       - SUPERADMIN_EMAIL=superadmin@surveyx.com
       - SUPERADMIN_PASS=123456
     volumes:
-      - app-vol:/root
+      - test-app-vol:/root
       - type: bind
         source: './'
         target: '/authsvc'
@@ -39,5 +39,5 @@ services:
         'go run ./cmd/seed/main.go; sleep 10',
       ]
 volumes:
-  postgres_data:
-  app-vol:
+  test-postgres_data:
+  test-app-vol:

@@ -270,7 +270,7 @@ func (s *Server) GetAppGroup(ctx context.Context, in *authrpc.GetAppGroupRequest
 	}
 
 	var appGroup db.AppGroup
-	var err error
+	var cErr error
 
 	// Try to get by ID first if provided
 	if in.Id != "" {
@@ -279,15 +279,15 @@ func (s *Server) GetAppGroup(ctx context.Context, in *authrpc.GetAppGroupRequest
 			log.Err(err).Msg("failed to parse Id")
 			return &authrpc.AppGroupResponse{}, err
 		}
-		appGroup, err = orm.GetAppGroupByID(ctx, id)
+		appGroup, cErr = orm.GetAppGroupByID(ctx, id)
 	} else {
 		// Get by name if ID not provided
-		appGroup, err = orm.GetAppGroupByName(ctx, in.Name)
+		appGroup, cErr = orm.GetAppGroupByName(ctx, in.Name)
 	}
 
-	if err != nil {
-		log.Err(err).Msg("failed to retrieve app group")
-		return &authrpc.AppGroupResponse{}, err
+	if cErr != nil {
+		log.Err(cErr).Msg("failed to retrieve app group")
+		return &authrpc.AppGroupResponse{}, cErr
 	}
 
 	return &authrpc.AppGroupResponse{
