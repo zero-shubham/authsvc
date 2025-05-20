@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/golang-migrate/migrate/v4"
 	"github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -51,7 +52,7 @@ func main() {
 	orm := db.New(dbConn)
 
 	err = config.MigrateUp()
-	if err != nil {
+	if err != nil && err != migrate.ErrNoChange {
 		log.Fatal().Err(err).Msg("failed to migrate db")
 	}
 
