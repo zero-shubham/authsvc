@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/exaring/otelpgx"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog"
@@ -16,12 +17,14 @@ import (
 	"github.com/zero-shubham/authsvc/internal"
 	authrpc "github.com/zero-shubham/authsvc/transport/grpc"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+	"go.opentelemetry.io/otel"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 const (
-	MaxIdelConn = 5
+	MaxIdelConn      = 5
+	OtelCollectorEnv = "OLTP_HTTP_ENDPOINT"
 )
 
 func main() {
@@ -30,7 +33,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	tp, err := config.Init()
+	tp, mp, err := config.Init(ctx, os.Getenv(OtelCollectorEnv))
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
@@ -50,7 +53,13 @@ func main() {
 	log.Info().Msg("listening on - :50050")
 
 	s := grpc.NewServer(
-		grpc.StatsHandler(otelgrpc.NewServerHandler(otelgrpc.WithTracerProvider(tp))))
+		grpc.StatsHandler(
+			otelgrpc.NewServerHandler(
+				otelgrpc.WithTracerProvider(tp),
+				otelgrpc.WithMeterProvider(mp),
+			),
+		),
+	)
 
 	reflection.Register(s)
 
@@ -58,6 +67,9 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create a config")
 	}
+
+	dbConfig.ConnConfig.Tracer = otelpgx.NewTracer(otelpgx.WithTracerProvider(otel.GetTracerProvider()))
+
 	dbConfig.MaxConns = MaxIdelConn
 	dbConfig.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
 		pgxUUID.Register(conn.TypeMap())
@@ -66,7 +78,12 @@ func main() {
 
 	dbConn, err := pgxpool.NewWithConfig(ctx, dbConfig)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to create a config")
+		log.Fatal().Err(err).Msg("Failed to db conn")
+	}
+
+	err = otelpgx.RecordStats(dbConn)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to add metrics to db")
 	}
 
 	authsvc := internal.NewServer(dbConn)
