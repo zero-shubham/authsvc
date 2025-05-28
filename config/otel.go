@@ -42,7 +42,6 @@ func Init(ctx context.Context, otelEndpoint string) (*sdktrace.TracerProvider, *
 		sdktrace.WithResource(resource),
 	)
 	otel.SetTracerProvider(tp)
-	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
 	mp := sdkmeter.NewMeterProvider(
 		sdkmeter.WithReader(sdkmeter.NewPeriodicReader(metricExporter, sdkmeter.WithInterval(time.Second*3))),
@@ -52,6 +51,7 @@ func Init(ctx context.Context, otelEndpoint string) (*sdktrace.TracerProvider, *
 
 	processor := sdktrace.NewBatchSpanProcessor(traceExporter)
 	tp.RegisterSpanProcessor(processor)
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
 	return tp, mp, nil
 

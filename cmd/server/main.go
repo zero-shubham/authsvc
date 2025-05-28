@@ -38,8 +38,12 @@ func main() {
 		log.Fatal().Err(err).Send()
 	}
 	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
+		if err := tp.Shutdown(ctx); err != nil {
 			log.Err(err).Msg("error shutting down tracer provider")
+		}
+
+		if err := mp.Shutdown(ctx); err != nil {
+			log.Err(err).Msg("error shutting down metric provider")
 		}
 	}()
 
