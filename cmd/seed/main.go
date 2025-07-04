@@ -5,11 +5,9 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/golang-migrate/migrate/v4"
 	"github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/zero-shubham/authsvc/config"
 	db "github.com/zero-shubham/authsvc/db/orm"
 	password "github.com/zero-shubham/authsvc/internal"
 )
@@ -51,10 +49,10 @@ func main() {
 
 	orm := db.New(dbConn)
 
-	err = config.MigrateUp()
-	if err != nil && err != migrate.ErrNoChange {
-		log.Fatal().Err(err).Msg("failed to migrate db")
-	}
+	// err = config.MigrateUp()
+	// if err != nil && err != migrate.ErrNoChange {
+	// 	log.Fatal().Err(err).Msg("failed to migrate db")
+	// }
 
 	found, err := orm.GetUserAndAppGrpByEmail(ctx, superAdminEmail)
 	if err != nil && err != pgx.ErrNoRows {
