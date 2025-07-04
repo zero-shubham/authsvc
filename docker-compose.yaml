@@ -71,9 +71,10 @@ services:
       - '5432:5432'
 
   authsvc:
-    build:
-      context: ./
-      dockerfile: ./Dockerfile
+    image: ghcr.io/zero-shubham/authsvc:sha-f89a0b5
+    # build:
+    #   context: ./
+    #   dockerfile: ./Dockerfile
     ports:
       - '50050:50050'
       - '50051:50051'

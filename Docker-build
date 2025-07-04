@@ -21,10 +21,13 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags "-s -w" -trimpath -o main /app/cmd/server
 
+RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags "-s -w" -trimpath -o seed /app/cmd/seed
+
 FROM gcr.io/distroless/static:nonroot
 
-
 COPY --from=builder /app/main /main
+
+COPY --from=builder /app/seed /seed
 
 
 EXPOSE 50050
